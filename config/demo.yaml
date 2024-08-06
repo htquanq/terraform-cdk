@@ -1,0 +1,31 @@
+"accountId": "756007437776"
+"region": "ap-southeast-1"
+"awsProfile": "default"
+
+vpc:
+  name: "demo"
+  config:
+    cidrBlock: 10.23.0.0/16
+    tags:
+      "Name": "demo"
+    tagsAll:
+      "Name": "demo"
+  publicSubnets:
+    - cidrBlock: 10.23.0.0/20
+    - cidrBlock: 10.23.16.0/20
+    - cidrBlock: 10.23.32.0/20
+  privateSubnets:
+    - cidrBlock: 10.23.48.0/20
+    - cidrBlock: 10.23.64.0/20
+    - cidrBlock: 10.23.80.0/20
+
+eksClusters:
+  - name: test
+    version: 1.18
+    roleArn: arn:aws:iam::aws:policy/AdministratorAccess
+
+
+iamRoles:
+  - name: eks
+    managedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
