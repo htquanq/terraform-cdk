@@ -40,24 +40,21 @@ func NewNetworkStack(scope constructs.Construct, id string, AppConfig structs.Ap
 		tmpSubnetConfig.CidrBlock = AppConfig.Vpc.PublicSubnets[i].CidrBlock
 		tmpSubnetConfig.MapPublicIpOnLaunch = bool(true)
 		tmpSubnetConfig.AvailabilityZone = jsii.String(cdktf.Fn_Element(cdktf.Token_AsAny(zones.Names()), jsii.Number(generateAzIndex(i, int(*cdktf.Fn_LengthOf(cdktf.Token_AsAny(zones.Names())))))).(string))
-		createNewSubnet(stack, *jsii.String("public-subnet-" + strconv.Itoa(i)), tmpSubnetConfig)
+		subnet := createNewSubnet(stack, *jsii.String("public-subnet-" + strconv.Itoa(i)), tmpSubnetConfig)
+		cdktf.NewTerraformOutput(stack, jsii.String("public-subnet-"+strconv.Itoa(i)+"-id"), &cdktf.TerraformOutputConfig{
+			Value: subnet.Id(),
+		})
 	}
 
 	for i := 0; i < len(AppConfig.Vpc.PrivateSubnets); i++ {
 		tmpSubnetConfig := subnetConfig
 		tmpSubnetConfig.CidrBlock = AppConfig.Vpc.PrivateSubnets[i].CidrBlock
 		tmpSubnetConfig.AvailabilityZone = jsii.String(cdktf.Fn_Element(cdktf.Token_AsAny(zones.Names()), jsii.Number(generateAzIndex(i, int(*cdktf.Fn_LengthOf(cdktf.Token_AsAny(zones.Names())))))).(string))
-		createNewSubnet(stack, *jsii.String("private-subnet-" + strconv.Itoa(i)), tmpSubnetConfig)
+		subnet := createNewSubnet(stack, *jsii.String("private-subnet-" + strconv.Itoa(i)), tmpSubnetConfig)
+		cdktf.NewTerraformOutput(stack, jsii.String("private-subnet-"+strconv.Itoa(i)+"-id"), &cdktf.TerraformOutputConfig{
+			Value: subnet.Id(),
+		})
 	}
 
 	return stack
-}
-
-func generateAzIndex(index int, maxIndex int) float64 {
-	if index >= maxIndex {
-		if index%maxIndex > 0 {
-			return float64(index%maxIndex - 1)
-		}
-	}
-	return float64(index)
 }

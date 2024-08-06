@@ -21,7 +21,9 @@ func main() {
 	}
 
 	stacks.NewNetworkStack(app, "VPC", helpers.Config(yamlFile))
-	// stacks.NewEksStack(app, "EksClusters", helpers.Config(yamlFile))
+	// stacks.NewEksStack(app, "EksClusters", helpers.Config(yamlFile), stacks.EksProps{
+	// 	vpcId: networkStack.
+	// })
 
 	app.Synth()
 }

@@ -29,3 +29,12 @@ func generateVpcOutput(stack cdktf.TerraformStack, vpc awsvpc.Vpc) {
 		Value: vpc.FriendlyUniqueId(),
 	})
 }
+
+func generateAzIndex(index int, maxIndex int) float64 {
+	if index >= maxIndex {
+		if index%maxIndex > 0 {
+			return float64(index%maxIndex - 1)
+		}
+	}
+	return float64(index)
+}
