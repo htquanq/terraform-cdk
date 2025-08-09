@@ -34,11 +34,13 @@ func NetworkStack(scope constructs.Construct, id string, AppConfig structs.AppCo
 		State:    jsii.String("available"),
 	})
 
+	azCount := int(*cdktf.Fn_LengthOf(zones.Names()))
+
 	for id, _ := range AppConfig.Vpc.PublicSubnets {
 		tmpSubnetConfig := subnetConfig
 		tmpSubnetConfig.CidrBlock = AppConfig.Vpc.PublicSubnets[id].CidrBlock
 		tmpSubnetConfig.MapPublicIpOnLaunch = bool(true)
-		tmpSubnetConfig.AvailabilityZone = jsii.String(cdktf.Fn_Element(zones.Names(), jsii.Number(float64(id))).(string))
+		tmpSubnetConfig.AvailabilityZone = jsii.String(cdktf.Fn_Element(zones.Names(), jsii.Number(float64(id%azCount))).(string))
 		subnet := createNewSubnet(stack, *jsii.String("public-subnet-" + strconv.Itoa(id)), tmpSubnetConfig)
 		cdktf.NewTerraformOutput(stack, jsii.String("public-subnet-"+strconv.Itoa(id)+"-id"), &cdktf.TerraformOutputConfig{
 			Value: subnet.Id(),
@@ -48,7 +50,7 @@ func NetworkStack(scope constructs.Construct, id string, AppConfig structs.AppCo
 	for id, _ := range AppConfig.Vpc.PrivateSubnets {
 		tmpSubnetConfig := subnetConfig
 		tmpSubnetConfig.CidrBlock = AppConfig.Vpc.PrivateSubnets[id].CidrBlock
-		tmpSubnetConfig.AvailabilityZone = jsii.String(cdktf.Fn_Element(zones.Names(), jsii.Number(float64(id))).(string))
+		tmpSubnetConfig.AvailabilityZone = jsii.String(cdktf.Fn_Element(zones.Names(), jsii.Number(float64(id%azCount))).(string))
 		subnet := createNewSubnet(stack, *jsii.String("private-subnet-" + strconv.Itoa(id)), tmpSubnetConfig)
 		cdktf.NewTerraformOutput(stack, jsii.String("private-subnet-"+strconv.Itoa(id)+"-id"), &cdktf.TerraformOutputConfig{
 			Value: subnet.Id(),
@@ -60,7 +62,7 @@ func NetworkStack(scope constructs.Construct, id string, AppConfig structs.AppCo
 	for id, _ := range AppConfig.Vpc.DbSubnets {
 		tmpSubnetConfig := subnetConfig
 		tmpSubnetConfig.CidrBlock = AppConfig.Vpc.DbSubnets[id].CidrBlock
-		tmpSubnetConfig.AvailabilityZone = jsii.String(cdktf.Fn_Element(zones.Names(), jsii.Number(float64(id))).(string))
+		tmpSubnetConfig.AvailabilityZone = jsii.String(cdktf.Fn_Element(zones.Names(), jsii.Number(float64(id%azCount))).(string))
 		subnet := createNewSubnet(stack, *jsii.String("db-subnet-" + strconv.Itoa(id)), tmpSubnetConfig)
 		dbSubnetIds = append(dbSubnetIds, subnet.Id())
 		cdktf.NewTerraformOutput(stack, jsii.String("db-subnet-"+strconv.Itoa(id)+"-id"), &cdktf.TerraformOutputConfig{

@@ -22,7 +22,7 @@ vpc:
     - cidrBlock: 10.23.96.0/20
     - cidrBlock: 10.23.112.0/20
     - cidrBlock: 10.23.128.0/20
-
+    - cidrBlock: 10.23.144.0/20
 eksClusters:
   - name: test
     version: 1.18
