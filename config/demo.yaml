@@ -18,12 +18,15 @@ vpc:
     - cidrBlock: 10.23.48.0/20
     - cidrBlock: 10.23.64.0/20
     - cidrBlock: 10.23.80.0/20
+  dbSubnets:
+    - cidrBlock: 10.23.96.0/20
+    - cidrBlock: 10.23.112.0/20
+    - cidrBlock: 10.23.128.0/20
 
 eksClusters:
   - name: test
     version: 1.18
     roleArn: arn:aws:iam::aws:policy/AdministratorAccess
-
 
 iamRoles:
   - name: eks

@@ -20,10 +20,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	stacks.NewNetworkStack(app, "VPC", helpers.Config(yamlFile))
-	// stacks.NewEksStack(app, "EksClusters", helpers.Config(yamlFile), stacks.EksProps{
-	// 	vpcId: networkStack.
-	// })
+	stackName := os.Getenv("STACK_NAME")
+	switch stackName {
+	case "network":
+		stacks.NetworkStack(app, "VPC", helpers.Config(yamlFile))
+	case "rds":
+		// stacks.RdsStack()
+	}
 
 	app.Synth()
 }

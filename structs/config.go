@@ -21,4 +21,5 @@ type VpcConfigRoot struct {
 	Config         awsvpc.VpcConfig         `yaml:"config"`
 	PublicSubnets  []awssubnet.SubnetConfig `yaml:"publicSubnets"`
 	PrivateSubnets []awssubnet.SubnetConfig `yaml:"privateSubnets"`
+	DbSubnets      []awssubnet.SubnetConfig `yaml:"dbSubnets"`
 }
